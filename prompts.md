@@ -8,7 +8,7 @@ These are the five prompts used to build DemoKart, a small online shop. Paste th
 | 2 | Filters | Category filter and price sort |
 | 3 | Cart | A working shopping cart that remembers items |
 | 4 | GitHub | Your code saved online in a private repo |
-| 5 | Vercel | Your shop live on the internet |
+| 5 | Vercel | Your shop live on the internet ([see the live demo](https://demokart-masai.vercel.app/)) |
 
 **Before you start:** you need Node.js, Git, the GitHub CLI (`gh`) and a GitHub account. Wait for each prompt to finish and check the result before pasting the next.
 
@@ -325,6 +325,8 @@ Then do these steps in order.
 ## Prompt 5: Vercel
 
 **Goal:** put your shop on the internet. GitHub is the single source of truth: whatever is on the `main` branch is what runs live.
+
+**Live example:** this is what the finished shop looks like once deployed: https://demokart-masai.vercel.app/
 
 **Before you start:** run `vercel login` in your own terminal (it opens a browser). Never paste a token into the chat.
 
