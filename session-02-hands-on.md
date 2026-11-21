@@ -2,6 +2,41 @@
 
 **Time:** 11:30 to 13:00. **You will build:** an online shop called DemoKart, from an empty folder, by giving prompts to Claude Code. **At the end:** a working shop on your laptop, with its code in your own private GitHub repo.
 
+## What are we doing today?
+
+You are going to build a real online shop, even if you have never built a website before. You will not type code yourself. Instead you will **describe what you want in plain English**, and an AI tool called **Claude Code** will write the code for you.
+
+Think of it like working with a very fast assistant:
+- **You** are the boss. You decide what the shop should look like and how it should work.
+- **Claude Code** is the assistant. It writes the files, installs the tools and runs the commands.
+- **Your job** is to give clear instructions, check the result, and ask for fixes when something is wrong.
+
+Here is the journey for the next 90 minutes:
+
+```text
+Empty folder  ->  Home page with products  ->  Filter, sort and search
+              ->  Shopping cart            ->  Code saved on GitHub
+```
+
+### Words you will hear today
+
+| Word | What it means in plain English |
+|---|---|
+| **Prompt** | A message you type to Claude Code, telling it what to do. |
+| **Claude Code** | An AI assistant that lives in your terminal. It can read and write files and run commands. |
+| **Terminal** | A text window where you type commands instead of clicking buttons. |
+| **Next.js** | A toolkit for building websites. It gives us the pages and the structure, so we do not start from nothing. |
+| **Tailwind CSS** | A tool for styling a website (colours, spacing, fonts) so it looks good. |
+| **Component** | One reusable piece of a page, such as the header or a product card. |
+| **localhost** | A website that runs only on your own laptop, so only you can see it. |
+| **localStorage** | A small storage space inside your browser, where a website can save things like your cart. |
+| **Git** | A tool that saves versions of your code, like "save game" points. |
+| **Commit** | One saved version in Git, with a short message about what changed. |
+| **GitHub** | A website that keeps an online copy of your Git versions, so your code is safe and shareable. |
+| **Repo** | Short for repository: one project's folder of code on GitHub. |
+
+You do not need to memorise these. Come back to this table whenever a word is new.
+
 ## How to use this guide
 
 A **prompt** is a message you give to Claude Code. This guide has two kinds of text, and they look different:
@@ -26,6 +61,12 @@ Go in order. Each prompt builds on the one before it. If you finish early, wait 
 
 ## Step 0. Get ready (10 min)
 
+**What is happening and why:** before we build, we make sure your laptop has the right tools. This is like checking you have a pen and paper before an exam. Nothing is built in this step.
+
+- **Node.js** lets your laptop run the tools that build websites. `node -v` checks it is installed.
+- **GitHub CLI (`gh`)** lets Claude Code talk to your GitHub account from the terminal. `gh auth status` checks you are signed in.
+- **Why an empty folder?** Claude Code will put all your shop's files in it. An empty folder keeps the project clean.
+
 Do these things yourself. There is nothing to paste yet.
 
 1. Create an empty folder called `demokart-shop`. Use lowercase and keep it empty.
@@ -43,6 +84,13 @@ Stuck on any of these? Put your hand up now.
 ## Step 1. Build the home page (25 min)
 
 **What this does:** Claude Code creates a Next.js app and builds the DemoKart home page with 15 products.
+
+**What is happening and why:**
+- This is the biggest prompt of the day, and it is long on purpose. A good prompt says **what to build**, **what the data looks like**, **how it should look**, and **how to check it is finished**. Read it and spot those four parts.
+- Claude Code first sets up an empty Next.js project (this installs a lot of files, so it can take a minute or two).
+- It then creates a file with your 15 products (`data/products.js`), and builds the page from small pieces called components: Header, Hero, CategoryFilter, ProductCard, ProductGrid and Footer.
+- Finally it starts your shop on **localhost**. Only you can see it, and only while it is running.
+- You will see Claude Code ask permission before it runs commands. That is a safety feature. Read each one, and ask if you do not understand it.
 
 **What you do:**
 1. Copy the whole prompt below.
@@ -135,6 +183,8 @@ WHEN DONE
 Run the build or lint to check for errors, start the dev server, and give me the local link.
 ```
 
+**What you just learned:** a detailed prompt gives a detailed result. Every part of the product card you see (the badge, the struck-through price, the green "% off") exists because one line of the prompt asked for it. Look at the prompt again and match the lines to what you see on screen.
+
 **Check it worked.** Tick every line before you raise your hand:
 - [ ] The DemoKart home page opens in your browser.
 - [ ] There are 15 products with photos, prices, a struck-through original price and a green "% off" tag.
@@ -156,6 +206,12 @@ Other problems: the folder must be empty and lowercase. If port 3000 is busy, op
 ## Step 2. Add filter, sort and search (15 min)
 
 **What this does:** you can narrow the products by category, sort by price, and search by name, all at once.
+
+**What is happening and why:**
+- A real shop has too many products to scroll through, so shoppers need ways to find things quickly.
+- The filter, the sort and the search all work on the same list of products. First the list is **filtered** (by category and search words), then it is **sorted** (by price). That order is why the three controls can work together instead of fighting each other.
+- It happens instantly because everything runs inside your browser, on products already on the page. Nothing is sent to a server, so there is no waiting and no page reload.
+- The prompt says "never change the original list, make a copy first". This protects your original product order, so "Featured" can always go back to it.
 
 **What you do:**
 1. Copy the whole prompt below.
@@ -225,6 +281,8 @@ Books + High to low, All + Low to high, and Clear filters).
 - [ ] Type in the search box: the list and the "Showing N products" count both change.
 - [ ] Search for something silly: you see "No products found" and a **Clear filters** button that resets everything.
 
+**What you just learned:** you can add a new feature to an existing project by describing it, and tell Claude Code to keep everything else working ("keep the current design and cart behaviour as they are").
+
 **Learn from the code.** Paste this into Claude Code, then read the answer:
 
 ```text
@@ -243,6 +301,13 @@ In 3 lines, explain how the filter and sort work.
 ## Step 3. Add the cart (20 min)
 
 **What this does:** you can add products to a cart, see a cart page with a total, and the cart is still there after you reload.
+
+**What is happening and why:**
+- A cart has to remember things. If you add a shirt and then refresh the page, a shop that forgets your shirt would be useless.
+- For now we save the cart in your browser's **localStorage**. It is like a small notebook that the website keeps inside your browser.
+- We save only the product `id` and the `quantity`, not names or prices. When the cart page opens, it looks up the current name and price from the product list. This way an old price is never stuck in a saved cart.
+- The prompt asks the cart to load **after** the page first appears. This avoids a common beginner error called a **hydration error**, where the page the server prepared does not match what your browser builds. If you ever see this word, now you know what it is about.
+- Other small touches, like the "Added ✓" button and the pop-up message, are not required to make a cart work. They are what makes a shop feel real and friendly to use.
 
 **What you do:**
 1. Copy the whole prompt below.
@@ -346,6 +411,8 @@ the local link. Then tell me how you tested it:
 - [ ] Open the site in a second tab and change the cart: the first tab updates too.
 - [ ] **Clear cart** asks you to confirm. An empty cart shows "Your cart is empty".
 
+**What you just learned:** a website can remember things between visits without a server, but only inside one browser. This is the limit of localStorage: it works for one person on one browser, and nobody else (including the shop owner) can see your cart.
+
 **Think about it (with the person next to you).** Open the shop in a private (incognito) window. The cart is empty there. Why? Where is your cart really stored? *(Answer: in your browser's localStorage. Another browser or laptop cannot see it.)*
 
 **If something goes wrong.**
@@ -361,6 +428,14 @@ the local link. Then tell me how you tested it:
 ## Step 4. Push your code to GitHub (15 min)
 
 **What this does:** Git saves versions of your code on your laptop. A saved version is called a commit. GitHub keeps a copy online. Claude Code will do this for you.
+
+**What is happening and why:**
+- Imagine writing an important essay with no backup. If your laptop breaks, it is gone. **Git** and **GitHub** are the backup, plus a history of every change.
+- A **commit** is like a "save point" in a video game. Each one has a message, such as "feat: build DemoKart storefront", so you can see later what changed and go back if something breaks.
+- **GitHub** keeps an online copy, so the code is safe and can be shared with a team. Later, services that put websites online can read your code from there.
+- The prompt first checks a file called **`.gitignore`**. It lists things that must never be saved online: `node_modules` (a huge folder of other people's code that anyone can re-download) and `.env` files (which hold secret keys and passwords). Leaking secrets on GitHub is one of the most common beginner mistakes, and this check prevents it.
+- The repo is **private**, so only you can see it.
+- Notice how the prompt tells Claude Code what to do when something goes wrong ("stop and ask me", "never force push"). Good prompts include rules for failure, not just for success.
 
 **What you do:**
 1. Copy the whole prompt below.
@@ -428,6 +503,8 @@ Then do these steps in order.
      I am logged in to my GitHub account.
 ```
 
+**What you just learned:** you now have your first project on GitHub. Any developer's portfolio starts like this.
+
 **Check it worked.**
 - [ ] Claude Code explained Git, a commit and GitHub in 3 lines.
 - [ ] Its last message says "Pushed successfully" and shows a repo link.
@@ -448,6 +525,23 @@ Then do these steps in order.
 ## Step 5. Share your repo (5 min)
 
 Post your repo link in the Slack channel. The link only opens for you while you are logged in to GitHub, because the repo is private.
+
+## What you built today
+
+Take a minute to look back. In about 90 minutes, from an empty folder, you:
+
+1. Set up a real **Next.js** project with one prompt.
+2. Built a **polished home page** with 15 products.
+3. Added **filter, sort and search** that work together.
+4. Added a **cart** that remembers your items.
+5. Saved your work with **Git** and put it on **GitHub**.
+
+You did this by describing what you wanted. The skill you practised today is the one that matters most when working with AI: **say clearly what you want, check the result, and ask for fixes in plain words.**
+
+### What is still missing (and what comes next)
+
+- **The shop is only on your laptop.** Nobody else can open it yet. Putting it live on the internet is called **deploying**, and it is the next step.
+- **The cart lives in one browser.** A real shop keeps carts and products in a **database** on a server, so they work on any device. That is also a later step.
 
 ## You are done when
 
